@@ -1,0 +1,11 @@
+npm init -y
+npm install express sequelize dotenv mysql2
+touch .env
+npm i body-parser
+session
+npm i cors
+npm i cookie-parser
+npm i nodemon
+express-session
+
+npx sequelize-cli model:generate --name User --attributes email:string,password:string
