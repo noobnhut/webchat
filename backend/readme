@@ -8,4 +8,14 @@ npm i cookie-parser
 npm i nodemon
 express-session
 
-npx sequelize-cli model:generate --name User --attributes email:string,password:string
+
+npx sequelize-cli model:generate --name user --attributes username:string,email:string,password:string,address:string,phone:string,avatar:string,isactive:boolean
+npx sequelize-cli model:generate --name message --attributes message_content:string,user_send:integer,user_reply:integer,status_seen:boolean,status_message:boolean,reply_mess:integer
+
+npx sequelize-cli model:generate --name media --attributes url:string,id_mess:string,name_media:string
+
+npx sequelize-cli model:generate --name room --attributes id_mess:integer,user_member:integer,user_created:integer
+npx sequelize-cli model:generate --name member_room --attributes id_room:integer,user_member:integer
+
+
+npx sequelize-cli db:migrate
