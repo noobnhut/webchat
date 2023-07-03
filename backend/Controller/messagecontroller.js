@@ -14,8 +14,8 @@ const getmessbyid = async(req,res)=>
                     { user_send: send, user_reply: reply },
                     { user_send: reply, user_reply: send }
                 ]
-            }
-            
+            } ,
+            order: [['id', 'ASC']], // Order by id in ascending order
           });
       
           return res.json(data);
@@ -23,6 +23,18 @@ const getmessbyid = async(req,res)=>
         console.log(error)
     }
 }
+const createChat = async(req,res)=>
+{
+    try {
+        const{send,reply,message_content}=req.body;
+        const chat = await Message.create({user_reply:reply,user_send:send, message_content:message_content,status_seen:false,status_message:false,reply_mess:null});
+        res.status(200).json(chat.id)
+         res.io.emit('chat', chat);
+    } catch (error) {
+        console.log(error)
+    }
+}
 module.exports = {
-    getmessbyid
+    getmessbyid,
+    createChat
 }
