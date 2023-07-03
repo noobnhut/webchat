@@ -22,7 +22,7 @@
                 <div class="relative">
                   <input autocomplete="off" id="email" name="email" type="text"
                     class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600"
-                    placeholder="Nhập địa chỉ email" />
+                    placeholder="Nhập địa chỉ email" v-model="email" />
                   <label for="email"
                     class="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Địa
                     chỉ email</label>
@@ -30,7 +30,7 @@
                 <div class="relative">
                   <input autocomplete="off" id="password" name="password" type="password"
                     class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600"
-                    placeholder="Nhập mật khẩu" />
+                    placeholder="Nhập mật khẩu" v-model="password" />
                   <label for="password"
                     class="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Mật
                     khẩu</label>
@@ -38,21 +38,21 @@
                 <div class="relative">
                     <input autocomplete="off" id="username" name="username" type="text"
                       class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600"
-                      placeholder="Nhập họ và tên" />
+                      placeholder="Nhập họ và tên" v-model="username" />
                     <label for="username"
                       class="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Họ và tên  </label>
                   </div>
                   <div class="relative">
                     <input autocomplete="off" id="phone" name="phone" type="text"
                       class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600"
-                      placeholder="Nhập số điện thoại" />
+                      placeholder="Nhập số điện thoại" v-model="phone" />
                     <label for="phone"
                       class="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Số điện thoại</label>
                   </div>
                   <div class="relative">
                     <input autocomplete="off" id="address" name="address" type="text"
                       class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:borer-rose-600"
-                      placeholder="Nhập địa chỉ" />
+                      placeholder="Nhập địa chỉ" v-model="address"/>
                     <label for="address"
                       class="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Địa chỉ</label>
                   </div>
@@ -61,7 +61,7 @@
             <!-- Login button -->
             <div class="text-center lg:text-left">
   
-              <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" @click="register()">
                 Đăng ký
               </button>
   
@@ -77,3 +77,42 @@
       </div>
     </section>
   </template>
+
+  <script>
+  export default {
+    data() {
+      return {
+        email: '',
+        password: '',
+        phone:'',
+        address:'',
+        username:''
+      }
+    },
+    methods: {
+     
+      async register() {
+        try {
+          const login = await this.$axios.post(`user/register`, {
+            email: this.email,
+            password: this.password,
+            address:this.address,
+            phone:this.phone,
+            username:this.username  
+          });
+  
+          console.log(login.data.message)
+          
+          if (login.status === 200) {
+           
+            setTimeout(() => {
+              window.location.href = `http://localhost:5173/`;
+            }, 1000)
+          }
+        } catch (error) {
+          // Xử lý lỗi nếu có
+          console.log('đăng nhập thất bại')
+        }
+      }}
+    }
+  </script>

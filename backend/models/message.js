@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       message.belongsTo(models.user, { foreignKey: 'user_reply' });
       message.belongsTo(models.user, { foreignKey: 'user_send' });
 
-     message.hasMany(models.media, { foreignKey: 'id_mess' });
+      message.hasMany(models.media, { foreignKey: 'id_mess' });
       message.hasMany(models.room, { foreignKey: 'id_mess' });
 
     }
