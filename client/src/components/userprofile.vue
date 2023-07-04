@@ -13,10 +13,10 @@
       {{ user.online ? "Hoạt động" : "Không hoạt động" }}
     </p>
     <div class="flex justify-center mt-5">
-      <button
+      <button @click="onShowImg"
         class="group relative h-12 w-48 overflow-hidden rounded-lg bg-white text-sm shadow mr-2"
       >
-        <div
+        <div 
           class="absolute inset-0 w-3 bg-blue-100 transition-all duration-[250ms] ease-out group-hover:w-full"
         ></div>
         <span class="relative text-black group-hover:text-white"
@@ -24,7 +24,7 @@
         >
       </button>
 
-      <button
+      <button @click="onShowPass"
         class="group relative h-12 w-48 overflow-hidden rounded-lg bg-white text-sm shadow mr-2"
       >
         <div
@@ -35,7 +35,7 @@
         >
       </button>
 
-      <button
+      <button @click="onShowInfo"
         class="group relative h-12 w-48 overflow-hidden rounded-lg bg-white text-sm shadow"
       >
         <div
@@ -53,11 +53,16 @@
       <p class="text-gray-600 mt-2"><span class="font-bold">Địa chỉ email: </span>{{ user.email }}</p>
     </div>
   </div>
+  <updateimg v-if="showimgupdate" @cancel="onShowImg"/>
+  <updateinfo v-if="showinfoupdate" @cancel="onShowInfo"/>
+  <changepass v-if="showchangepass" @cancel="onShowPass"/>
 </template>
 
 <script>
 import io from "socket.io-client";
-
+import updateimg from "./updateimg.vue";
+import updateinfo from './updateinfor.vue';
+import changepass from './changepass.vue'
 export default {
   data() {
     return {
@@ -65,9 +70,13 @@ export default {
       user: "",
       usersocket: [],
       socket: "",
+      showimgupdate:false,
+      showinfoupdate:false,
+      showpasschange:false,
+      showchangepass:false
     };
   },
-  components: {},
+  components: {updateimg,updateinfo, changepass},
   async mounted() {
     const result = await this.$axios.get("user/get");
     this.users = result.data;
@@ -77,7 +86,7 @@ export default {
     socket.emit("userConnected", userId);
     socket.on("UpdateUserStatus", (data) => {
       this.updateUserStatus(data);
-      console.log(this.usersocket);
+      
     });
     socket.on("Updatedisconnect", (data) => {
       this.updateUserStatus(data);
@@ -98,6 +107,18 @@ export default {
         };
       });
     },
+    onShowImg()
+    {
+      this.showimgupdate = !this.showimgupdate
+    },
+    onShowInfo()
+    {
+      this.showinfoupdate = !this.showinfoupdate
+    },
+    onShowPass()
+    {
+      this.showchangepass = !this.showchangepass
+    }
   },
 };
 </script>

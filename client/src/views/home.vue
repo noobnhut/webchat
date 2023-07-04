@@ -89,7 +89,7 @@
         </div>
       </div>
       <!--giao dien tro chuyen-->
-      <div class="flex flex-col flex-auto h-full p-6 bg-gray-100">
+      <div class="flex flex-col flex-auto h-full p-6 ">
         <userprofile v-if="!showchat" />
         <chat :currentUserid="idcurrent" v-if="showchat" />
       </div>
@@ -120,6 +120,7 @@
             </div>
         </div>
     </div>
+   
 </template>
 
 <script>
@@ -136,12 +137,13 @@ export default {
       showchat: false,
       idcurrent: "",
       showDeleteHistory: false,
-     
+    
     };
   },
   components: {
     chat,
     userprofile,
+
 
   },
   async mounted() {
@@ -203,7 +205,7 @@ export default {
             reply:this.user.id
           });
           this.chats=result.data;
-          console.log(result.data)
+ 
         } catch (error) {
           console.log(error)
         }
@@ -222,7 +224,8 @@ export default {
       } catch (error) {
         console.log(error)
       }
-    }
+    },
+    
   },
 };
 </script>

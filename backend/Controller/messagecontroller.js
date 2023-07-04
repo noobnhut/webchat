@@ -14,7 +14,7 @@ const getmessbyid = async (req, res) => {
           { user_send: reply, user_receive: send },
         ],
       },
-      order: [["id", "ASC"]], // Order by id in ascending order
+      order: [["id", "ASC"]], 
     });
 
     return res.json(data);
