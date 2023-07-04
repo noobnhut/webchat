@@ -11,21 +11,23 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      message.belongsTo(models.user, { foreignKey: 'user_reply' });
+      message.belongsTo(models.user, { foreignKey: 'user_receive' });
       message.belongsTo(models.user, { foreignKey: 'user_send' });
 
-      message.hasMany(models.media, { foreignKey: 'id_mess' });
       message.hasMany(models.room, { foreignKey: 'id_mess' });
+      
+
 
     }
   }
   message.init({
     message_content: DataTypes.STRING,
     user_send: DataTypes.INTEGER,
-    user_reply: DataTypes.INTEGER,
+    user_receive: DataTypes.INTEGER,
     status_seen: DataTypes.BOOLEAN,
     status_message: DataTypes.BOOLEAN,
-    reply_mess: DataTypes.INTEGER
+    reply_mess: DataTypes.INTEGER,
+    deleted: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'message',

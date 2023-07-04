@@ -20,7 +20,7 @@ module.exports = {
           key: 'id'
         }
       },
-      user_reply: {
+      user_receive: {
        type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -35,6 +35,9 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       reply_mess: {
+        type: Sequelize.INTEGER
+      },
+      deleted: {
         type: Sequelize.INTEGER
       },
       createdAt: {

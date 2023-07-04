@@ -11,8 +11,8 @@ const getmessbyid = async(req,res)=>
         const data = await Message.findAll({
             where: {
                 [Op.or]: [
-                    { user_send: send, user_reply: reply },
-                    { user_send: reply, user_reply: send }
+                    { user_send: send, user_receive: reply },
+                    { user_send: reply, user_receive: send }
                 ]
             } ,
             order: [['id', 'ASC']], // Order by id in ascending order
@@ -27,7 +27,7 @@ const createChat = async(req,res)=>
 {
     try {
         const{send,reply,message_content}=req.body;
-        const chat = await Message.create({user_reply:reply,user_send:send, message_content:message_content,status_seen:false,status_message:false,reply_mess:null});
+        const chat = await Message.create({user_receive:reply,user_send:send, message_content:message_content,status_seen:false,status_message:false,reply_mess:null});
         res.status(200).json(chat.id)
          res.io.emit('chat', chat);
     } catch (error) {
