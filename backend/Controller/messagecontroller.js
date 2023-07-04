@@ -43,27 +43,27 @@ const createChat = async (req, res) => {
 const deleteHistory = async (req, res) => {
   try {
     const { send, receive } = req.body;
-    // const exitst = await Message.findAll({
-    //   where: {
-    //     [Op.or]: [
-    //       { user_send: send, user_receive: receive },
-    //       { user_send: receive, user_receive: send },
-    //     ],
-    //   },
-    //   order: [["id", "ASC"]],
-    // });
+    const exitst = await Message.findAll({
+      where: {
+        [Op.or]: [
+          { user_send: send, user_receive: receive },
+          { user_send: receive, user_receive: send },
+        ],
+      },
+      order: [["id", "ASC"]],
+    });
 
-    // exitst.forEach(async (message) => {
-    //   if (message.user_send === send || message.user_receive === send) {
-    //     if (message.deleted == null) {
-    //       await message.update({ deleted: send });
-    //     }
-    //     if(message.deleted == receive)
-    //     {
-    //         await message.destroy()
-    //     }
-    //   }
-    // });
+    exitst.forEach(async (message) => {
+      if (message.user_send === send || message.user_receive === send) {
+        if (message.deleted == null) {
+          await message.update({ deleted: send });
+        }
+        if(message.deleted == receive)
+        {
+            await message.destroy()
+        }
+      }
+    });
 
     res.json({send,receive});
   } catch (error) {

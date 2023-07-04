@@ -4,7 +4,7 @@
         <!--noi dung cuoc tro chuyen-->
         <div class="flex flex-col h-full overflow-x-auto mb-4">
           <div class="flex flex-col h-full">
-            <div class="grid grid-cols-12 gap-y-2" v-for="chat in chats">
+            <div class="grid grid-cols-12 gap-y-2" v-for="chat in chats.filter(item=>item.deleted !== user.id)">
             
               <!--nguoi gui-->
               <div  class="col-start-1 col-end-8 p-3 rounded-lg" v-if="chat.user_send !== user.id">

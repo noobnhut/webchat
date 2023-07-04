@@ -7,7 +7,7 @@ const {
 const routerMessage = express.Router();
 routerMessage.post('/api/message/getbyid', getmessbyid);
 routerMessage.post('/api/message/create',  createChat);
-routerMessage.delete('/api/message/delete',  deleteHistory);
+routerMessage.post('/api/message/delete',  deleteHistory);
 
 module.exports = { 
     routerMessage,

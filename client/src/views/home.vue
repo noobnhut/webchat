@@ -97,7 +97,7 @@
     </div>
   </div>
   <!--modal xóa-->
-  <div class=" fixed w-full h-full top-0 left-0 flex items-center justify-center z-50 " v-if="showNotification">
+  <div class=" fixed w-full h-full top-0 left-0 flex items-center justify-center z-50 " v-if="showDeleteHistory">
         <div class="absolute w-full h-full bg-gray-900 opacity-50" @click="onclosedelete"></div>
 
         <div class=" bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto " >
@@ -135,7 +135,7 @@ export default {
       usersocket: [],
       showchat: false,
       idcurrent: "",
-      showNotification: false,
+      showDeleteHistory: false,
      
     };
   },
@@ -188,11 +188,11 @@ export default {
     },
     opendelete(id) {
       this.idcurrent = id;
-      this.showNotification = true
+      this.showDeleteHistory = true
     },
     onclosedelete()
     {
-      this.showNotification=false
+      this.showDeleteHistory=false
     },
     async getchat()
       {
@@ -211,12 +211,13 @@ export default {
     async deleteChat()
     {
       try {
-       const delete2= await this.$axios.delete('message/delete',
+       const delete2= await this.$axios.post(`message/delete`,
         {
           send:this.user.id,
           receive:this.idcurrent
         })
         console.log(delete2.data)
+        this.showDeleteHistory = false
         this.getchat();
       } catch (error) {
         console.log(error)
