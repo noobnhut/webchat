@@ -7,6 +7,7 @@ dotenv.config();
 const bcrypt = require('bcrypt');
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN;
+const multer = require('multer');
 const getuser = async (req, res) => {
     try {
         const get = await User.findAll();
@@ -16,31 +17,67 @@ const getuser = async (req, res) => {
     }
 }
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, './uploads/');
+    },
+    filename: function (req, file, cb) {
+      cb(null, `${Date.now()}_${file.originalname}`);
+    }
+  });
+  
+  const upload = multer({
+    storage: storage,
+    limits: {
+      fileSize: 100 * 1024 * 1024 // giới hạn dung lượng file 100MB
+    },
+  });
+  
 const register = async (req, res) => {
     try {
-        const { username, email, password, address, phone } = req.body;
-        const existUser = await User.findOne({ where: { email: email } });
-        if (!existUser) {
-            const salt = await bcrypt.genSalt(10);
-            const hash = await bcrypt.hash(password, salt)
+        upload.array('avatar', 10)(req, res, async function (err) {
+            const { username, email, password, address, phone } = req.body;
+            if (err instanceof multer.MulterError) {
+                return res.status(400).json({ message: err.message });
+            } else if (err) {
+                return res.status(400).json({ message: err.message });
+            }
 
-            const user = await User.create(
-                {
-                    username: username,
-                    password: hash,
-                    email: email,
-                    address: address,
-                    phone: phone,
-                    isactive: true
+            // Nếu không có file ảnh được chọn
+            if (!req.files || !username || !email || !password || !address || !phone ) {
+                return res.status(202).json({ message: 'Vui lòng điền đầy đủ thông tin' });
+            }
+
+            const imgs = [];
+            const existingUser = await User.findOne({
+                where: {
+                    email
                 }
-            )
-            return res.status(200).json({ message: "Đăng ký thành công" })
-        } else {
-            return res.status(400).json({ message: "Tài khoản email đã tồn tại" })
+            });
 
-        }
+            if (existingUser) {
+                return res.status(200).json(
+                    {message:'Email đã tồn tại trong hệ thống'}
+                );
+            }
+            // Mã hóa mật khẩu
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+            for (let i = 0; i < req.files.length; i++) {
+                const imagePath = req.files[i].path;
+                const imageUrl = `${req.protocol}://${req.get('host')}/${req.files[i].filename}`;
+                const img = await User.create({
+                    username: username, email: email, password: hashedPassword, address: address, phone: phone, notification_status: true,
+                    avatar: imageUrl, isactive: true
+                });
+                imgs.push(img);
+            }
+
+            return res.status(200).json({ message: "Đăng kí thành công", imgs });
+        });
     } catch (error) {
-        console.log(error)
+        console.error(error);
+        return res.status(500).json({ message: 'Lỗi server' });
     }
 }
 const login = async (req, res) => {

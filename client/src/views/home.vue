@@ -22,9 +22,11 @@
         </div>
         <div class="flex flex-col items-center bg-indigo-100 border border-gray-200 mt-4 w-full py-6 px-4 rounded-lg"
           v-for="user in usersocket.filter(items => items.id == this.user.id)" :key="user.id">
+         
           <div class="h-20 w-20 rounded-full border overflow-hidden">
+          
             <img
-              src="https://www.vietnamfineart.com.vn/wp-content/uploads/2023/03/hinh-avatar-anime-nu-lanh-lung-vo-cam-8.jpg"
+             :src=user.avatar
               alt="Avatar" class="h-full w-full" />
           </div>
           <div class="text-sm font-semibold mt-2"> {{ user.username }} </div>
@@ -45,7 +47,9 @@
 
             <button class="flex flex-row items-center hover:bg-gray-100 rounded-xl p-2" @click="openchat(user.id)">
               <div class="flex items-center justify-center h-8 w-8 bg-indigo-200 rounded-full">
-                N
+                <img
+             :src=user.avatar
+              alt="Avatar" class="h-full w-full" />
               </div>
               <div class="ml-2 text-sm font-semibold" >{{ user.username }}</div>
             </button>
@@ -120,6 +124,7 @@ export default {
         return {
           id: user.id,
           username: user.username,
+          avatar:user.avatar,
           online: data[user.id]
         };
       });
