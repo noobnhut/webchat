@@ -17,7 +17,7 @@
 
                     <!--bắt đầu mật khẩu cũ-->
                     <input type="password" class="w-full px-3 py-2 mb-2 text-gray-700 border rounded-lg focus:outline-none"
-                        placeholder="Nhập mật khẩu cũ " v-model="password" @focus="checkpasswordError"/>
+                        placeholder="Nhập mật khẩu cũ " v-model="password" @focus="checkpasswordError" />
                     <p class="text-red-500 text-sm ml-1" v-if="!password && passwordFocused">Mật khẩu bị trống.</p>
                          
                     <!--kết thúc mật khẩu cũ-->
@@ -75,6 +75,7 @@ export default {
     mounted() {
         this.user = JSON.parse(localStorage.getItem('user'));
         this.email = this.user.email
+        console.log(this.user.id)
     },
     methods: {
         onclose() {
